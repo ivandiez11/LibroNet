@@ -12,16 +12,227 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
 <style>
-    body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; }
-    header { background-color: #2c3e50; color: white; padding: 1.5rem; text-align: center; }
-    main { padding: 2rem; }
-    table { width: 100%; background-color: white; }
-    th { background-color: #34495e; color: white; }
-    .actions { text-align: center; white-space: nowrap; }
-    .badge-yes { background-color: #27ae60; }
-    .badge-no { background-color: #c0392b; }
-    .add-form { margin-top: 2rem; background-color: white; padding: 1rem; border-radius: 6px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    .hidden { display: none; }
+/* =======================
+   Global
+======================= */
+body {
+    font-family: 'Merriweather', serif;
+    background-color: #f5f2eb; /* color pergamino */
+    color: #3e3e3e;
+    margin: 0;
+}
+
+header {
+    background-color: #8b5e3c; /* color madera oscura */
+    color: #fff;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+header h1 {
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-size: 2rem;
+}
+
+/* =======================
+   Main
+======================= */
+main {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h2 {
+    font-weight: 600;
+    color: #5b3a29;
+    margin-bottom: 1rem;
+}
+
+/* =======================
+   Tabla de libros centrada
+======================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fdf7ed;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    table-layout: fixed; /* columnas uniformes */
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: center; /* centrado horizontal */
+    vertical-align: middle; /* centrado vertical */
+}
+
+th {
+    background-color: #a87c52;
+    color: #fff;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+td {
+    overflow-wrap: break-word;
+}
+
+tr:nth-child(even) {
+    background-color: #f7eee0;
+}
+
+.actions button {
+    margin: 0 2px;
+    vertical-align: middle;
+}
+
+td .badge {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* =======================
+   Badges
+======================= */
+.badge-yes {
+    background-color: #4e944f; /* verde libro */
+    padding: 0.35em 0.6em;
+    font-size: 0.8rem;
+    border-radius: 12px;
+    color: #fff;
+}
+
+.badge-no {
+    background-color: #c94c4c; /* rojo quemado */
+    padding: 0.35em 0.6em;
+    font-size: 0.8rem;
+    border-radius: 12px;
+    color: #fff;
+}
+
+/* =======================
+   Formulario agregar libro
+======================= */
+.add-form {
+    margin-top: 2rem;
+    background-color: #fdf7ed;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.add-form input,
+.add-form select {
+    border-radius: 6px;
+    padding: 0.5rem;
+    border: 1px solid #c7b198;
+    transition: all 0.2s ease-in-out;
+    background-color: #fffaf0;
+}
+
+.add-form input:focus,
+.add-form select:focus {
+    outline: none;
+    border-color: #8b5e3c;
+    box-shadow: 0 0 0 0.2rem rgba(139,94,60,0.25);
+}
+
+.add-form button {
+    border-radius: 6px;
+    background-color: #8b5e3c;
+    border-color: #8b5e3c;
+    color: #fff;
+}
+
+.add-form button:hover {
+    background-color: #a87c52;
+    border-color: #a87c52;
+}
+
+/* =======================
+   Modales
+======================= */
+.modal-content {
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #fdf7ed;
+    font-family: 'Merriweather', serif;
+}
+
+.modal-header {
+    background-color: #a87c52;
+    color: #fff;
+    font-weight: 600;
+}
+
+.modal-footer button {
+    border-radius: 6px;
+}
+
+.modal-body input,
+.modal-body select {
+    border-radius: 6px;
+    margin-bottom: 0.8rem;
+    border: 1px solid #c7b198;
+    background-color: #fffaf0;
+}
+
+/* =======================
+   Botones
+======================= */
+.btn-primary {
+    background-color: #8b5e3c;
+    border-color: #8b5e3c;
+}
+
+.btn-primary:hover {
+    background-color: #a87c52;
+    border-color: #a87c52;
+}
+
+.btn-warning {
+    background-color: #d4a373;
+    border-color: #d4a373;
+    color: #fff;
+}
+
+.btn-warning:hover {
+    background-color: #e0b182;
+    border-color: #e0b182;
+}
+
+.btn-danger {
+    background-color: #c94c4c;
+    border-color: #c94c4c;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #d66565;
+    border-color: #d66565;
+}
+
+.btn-secondary {
+    background-color: #b8a17a;
+    border-color: #b8a17a;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background-color: #d4b996;
+    border-color: #d4b996;
+}
+
+.hidden {
+    display: none;
+}
 </style>
 </head>
 
@@ -52,7 +263,7 @@
     <tbody>
         {% for libro in libros %}
         <tr data-id="{{ libro.id_libro }}">
-            <td class="hidden" >{{ libro.id_libro }}</td>
+            <td class="hidden">{{ libro.id_libro }}</td>
             <td class="libro-titulo">{{ libro.titulo }}</td>
             <td class="libro-autor">{{ libro.autor }}</td>
             <td class="libro-editorial">{{ libro.editorial or "—" }}</td>
@@ -105,14 +316,12 @@
     </div>
 </form>
 
-<!-- MODAL ELIMINAR -->
+<!-- MODALES ELIMINAR Y EDITAR -->
 <div class="modal fade" id="modalEliminar" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">
-                    <i class="bi bi-exclamation-triangle-fill"></i> Confirmar eliminación
-                </h5>
+                <h5 class="modal-title"><i class="bi bi-exclamation-triangle-fill"></i> Confirmar eliminación</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -127,7 +336,6 @@
     </div>
 </div>
 
-<!-- MODAL EDITAR -->
 <div class="modal fade" id="modalEditar" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -138,36 +346,14 @@
             <div class="modal-body">
                 <form id="formEditar">
                     <input type="hidden" name="id_libro" id="editar-id">
-                    <div class="mb-2">
-                        <label>Título</label>
-                        <input type="text" class="form-control" id="editar-titulo" name="titulo" required>
-                    </div>
-                    <div class="mb-2">
-                        <label>Autor</label>
-                        <input type="text" class="form-control" id="editar-autor" name="autor" required>
-                    </div>
-                    <div class="mb-2">
-                        <label>Editorial</label>
-                        <input type="text" class="form-control" id="editar-editorial" name="editorial">
-                    </div>
-                    <div class="mb-2">
-                        <label>ISBN</label>
-                        <input type="text" class="form-control" id="editar-isbn" name="isbn">
-                    </div>
-                    <div class="mb-2">
-                        <label>Año</label>
-                        <input type="number" class="form-control" id="editar-anio" name="anio_publicacion">
-                    </div>
-                    <div class="mb-2">
-                        <label>Categoría</label>
-                        <input type="text" class="form-control" id="editar-categoria" name="categoria">
-                    </div>
-                    <div class="mb-2">
-                        <label>Ejemplares</label>
-                        <input type="number" class="form-control" id="editar-ejemplares" name="ejemplares" min="1">
-                    </div>
-                    <div class="mb-2">
-                        <label>Disponible</label>
+                    <div class="mb-2"><label>Título</label><input type="text" class="form-control" id="editar-titulo" name="titulo" required></div>
+                    <div class="mb-2"><label>Autor</label><input type="text" class="form-control" id="editar-autor" name="autor" required></div>
+                    <div class="mb-2"><label>Editorial</label><input type="text" class="form-control" id="editar-editorial" name="editorial"></div>
+                    <div class="mb-2"><label>ISBN</label><input type="text" class="form-control" id="editar-isbn" name="isbn"></div>
+                    <div class="mb-2"><label>Año</label><input type="number" class="form-control" id="editar-anio" name="anio_publicacion"></div>
+                    <div class="mb-2"><label>Categoría</label><input type="text" class="form-control" id="editar-categoria" name="categoria"></div>
+                    <div class="mb-2"><label>Ejemplares</label><input type="number" class="form-control" id="editar-ejemplares" name="ejemplares" min="1"></div>
+                    <div class="mb-2"><label>Disponible</label>
                         <select class="form-select" id="editar-disponible" name="disponible">
                             <option value="1">Sí</option>
                             <option value="0">No</option>
@@ -210,11 +396,9 @@ document.getElementById('btnConfirmarEliminar').addEventListener('click', async 
 document.addEventListener('click', e => {
     const btn = e.target.closest('.btn-editar');
     if (!btn) return;
-
     const row = document.querySelector(`tr[data-id="${btn.dataset.id}"]`);
     if (!row) return;
 
-    // Llenar modal con datos de la fila
     document.getElementById('editar-id').value = btn.dataset.id;
     document.getElementById('editar-titulo').value = row.querySelector('.libro-titulo').innerText;
     document.getElementById('editar-autor').value = row.querySelector('.libro-autor').innerText;
@@ -232,7 +416,6 @@ document.addEventListener('click', e => {
 document.getElementById('btnGuardarEditar').addEventListener('click', async () => {
     const form = document.getElementById('formEditar');
     const data = new FormData(form);
-
     const id = data.get('id_libro');
     const payload = new URLSearchParams(data);
 
@@ -250,5 +433,6 @@ document.getElementById('btnGuardarEditar').addEventListener('click', async () =
 });
 </script>
 
+</main>
 </body>
 </html>
