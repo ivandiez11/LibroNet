@@ -1,88 +1,60 @@
-from fastapi import FastAPI, Request, Form, HTTPException
-from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
+from fastapi import FastAPI, Request, HTTPException, Form
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel, EmailStr, field_validator, ValidationError
+from pydantic import BaseModel
 from typing import Optional, List
-import re
 
-# importar funciones de la base de datos
 from app.database import (
-    delete_libro,
-    get_connection,
-    fetch_all_libros
+    fetch_all_libros,
+    fetch_libro_by_id,
+    create_libro,
+    update_libro,
+    delete_libro
 )
 
+# =========================
+# MODELOS
+# =========================
 
-# Modelo para la Base de Datos
 class LibroNet(BaseModel):
     id_libro: Optional[int]
     titulo: str
     autor: str
-    editorial: str
-    isbn: str
-    anio_publicacion: int
-    categoria: str
+    editorial: Optional[str]
+    isbn: Optional[str]
+    anio_publicacion: Optional[int]
+    categoria: Optional[str]
     ejemplares: int
     disponible: int
 
-# Modelo para crear un nuevo libro (sin ID)
-class LibroCreate(BaseModel):
-    pass
-
-# Modelo para actualiazar un nuevo libro (sin ID)
-class LibroUpdate(BaseModel):
-    pass
-
-# Modelo completo de Libro (con ID)
-class Libro(BaseModel):
-    id: int
-
+# =========================
+# UTILIDADES
+# =========================
 
 def map_rows_to_libros(rows: List[dict]) -> List[LibroNet]:
-    libros = []
-    for row in rows:
-        libro = LibroNet(
-            id_libro=row["id_libro"],
-            titulo=row["titulo"],
-            autor=row["autor"],
-            editorial=row["editorial"],
-            isbn=row["isbn"],
-            anio_publicacion=row["anio_publicacion"],
-            categoria=row["categoria"],
-            ejemplares=row["ejemplares"],
-            disponible=row["disponible"]
-        )
-        libros.append(libro)
-    return libros
+    return [LibroNet(**row) for row in rows]
 
+# =========================
+# APP
+# =========================
 
-
-
-app = FastAPI(title = "LibroNet")
-
-# Servir archivos estáticos
+app = FastAPI(title="LibroNet")
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
-
-# Motor de plantillas
 templates = Jinja2Templates(directory="app/templates")
-
 
 @app.get("/ping")
 def ping():
     return {"message": "pong"}
 
-# --- Get principal ---
+# =========================
+# INDEX / LISTAR
+# =========================
+
 @app.get("/", response_class=HTMLResponse)
 def get_index(request: Request):
-
-    # 1 rObtenemos los libros de la base de datos
     rows = fetch_all_libros()
-
-    # 2 Mapear las filas a instancias de LibroNet
     libros = map_rows_to_libros(rows)
-
-    # 3 Enviamos la plantilla
     return templates.TemplateResponse(
         "pages/index.html",
         {
@@ -91,19 +63,104 @@ def get_index(request: Request):
         }
     )
 
+# =========================
+# CREAR LIBRO
+# =========================
 
-# --- DELETE eliminar libros ---
+@app.post("/libros/crear")
+def crear_libro(
+    titulo: str = Form(...),
+    autor: str = Form(...),
+    editorial: Optional[str] = Form(None),
+    isbn: Optional[str] = Form(None),
+    anio_publicacion: Optional[str] = Form(None),
+    categoria: Optional[str] = Form(None),
+    ejemplares: str = Form("1"),
+    disponible: str = Form("1"),
+):
+    try:
+        anio = int(anio_publicacion) if anio_publicacion else None
+        ejemplares_int = int(ejemplares)
+        disponible_int = int(disponible)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Valores numéricos inválidos")
+
+    data = {
+        "titulo": titulo,
+        "autor": autor,
+        "editorial": editorial,
+        "isbn": isbn,
+        "anio_publicacion": anio,
+        "categoria": categoria,
+        "ejemplares": ejemplares_int,
+        "disponible": disponible_int,
+    }
+    create_libro(data)
+    return RedirectResponse("/", status_code=303)
+
+# =========================
+# EDITAR LIBRO
+# =========================
+
+@app.get("/libros/editar/{libro_id}", response_class=HTMLResponse)
+def editar_libro_form(request: Request, libro_id: int):
+    libro = fetch_libro_by_id(libro_id)
+    if not libro:
+        raise HTTPException(status_code=404, detail="Libro no encontrado")
+    return templates.TemplateResponse(
+        "pages/edit.html",
+        {
+            "request": request,
+            "libro": libro
+        }
+    )
+
+@app.post("/libros/editar/{libro_id}")
+def editar_libro(
+    libro_id: int,
+    titulo: str = Form(...),
+    autor: str = Form(...),
+    editorial: Optional[str] = Form(None),
+    isbn: Optional[str] = Form(None),
+    anio_publicacion: Optional[str] = Form(None),
+    categoria: Optional[str] = Form(None),
+    ejemplares: str = Form("1"),
+    disponible: str = Form("1"),
+):
+    try:
+        anio = int(anio_publicacion) if anio_publicacion else None
+        ejemplares_int = int(ejemplares)
+        disponible_int = int(disponible)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Valores numéricos inválidos")
+
+    data = {
+        "titulo": titulo,
+        "autor": autor,
+        "editorial": editorial,
+        "isbn": isbn,
+        "anio_publicacion": anio,
+        "categoria": categoria,
+        "ejemplares": ejemplares_int,
+        "disponible": disponible_int
+    }
+
+    actualizado = update_libro(libro_id, data)
+    if not actualizado:
+        raise HTTPException(status_code=404, detail="Libro no encontrado")
+
+    return RedirectResponse("/", status_code=303)
+
+# =========================
+# ELIMINAR LIBRO
+# =========================
+
 @app.delete("/libros/{libro_id}")
 def delete_libro_endpoint(libro_id: int):
-    """
-    Endpoint para eliminar un libro por su ID.
-    """
     eliminado = delete_libro(libro_id)
-    
     if not eliminado:
         raise HTTPException(status_code=404, detail="Libro no encontrado")
-    
     return JSONResponse(
-        content={"mensaje": "Libro eliminado exitosamente"},
+        content={"mensaje": "Libro eliminado correctamente"},
         status_code=200
     )
