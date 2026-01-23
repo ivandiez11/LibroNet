@@ -1,0 +1,221 @@
+/* =======================
+   Global
+======================= */
+body {
+    font-family: 'Merriweather', serif;
+    background-color: #f5f2eb; /* color pergamino */
+    color: #3e3e3e;
+    margin: 0;
+}
+
+header {
+    background-color: #8b5e3c; /* color madera oscura */
+    color: #fff;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+header h1 {
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-size: 2rem;
+}
+
+/* =======================
+   Main
+======================= */
+main {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h2 {
+    font-weight: 600;
+    color: #5b3a29;
+    margin-bottom: 1rem;
+}
+
+/* =======================
+   Tabla de libros centrada
+======================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fdf7ed;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    table-layout: fixed; /* columnas uniformes */
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: center; /* centrado horizontal */
+    vertical-align: middle; /* centrado vertical */
+}
+
+th {
+    background-color: #a87c52;
+    color: #fff;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+td {
+    overflow-wrap: break-word;
+}
+
+tr:nth-child(even) {
+    background-color: #f7eee0;
+}
+
+.actions button {
+    margin: 0 2px;
+    vertical-align: middle;
+}
+
+td .badge {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* =======================
+   Badges
+======================= */
+.badge-yes {
+    background-color: #4e944f; /* verde libro */
+    padding: 0.35em 0.6em;
+    font-size: 0.8rem;
+    border-radius: 12px;
+    color: #fff;
+}
+
+.badge-no {
+    background-color: #c94c4c; /* rojo quemado */
+    padding: 0.35em 0.6em;
+    font-size: 0.8rem;
+    border-radius: 12px;
+    color: #fff;
+}
+
+/* =======================
+   Formulario agregar libro
+======================= */
+.add-form {
+    margin-top: 2rem;
+    background-color: #fdf7ed;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.add-form input,
+.add-form select {
+    border-radius: 6px;
+    padding: 0.5rem;
+    border: 1px solid #c7b198;
+    transition: all 0.2s ease-in-out;
+    background-color: #fffaf0;
+}
+
+.add-form input:focus,
+.add-form select:focus {
+    outline: none;
+    border-color: #8b5e3c;
+    box-shadow: 0 0 0 0.2rem rgba(139,94,60,0.25);
+}
+
+.add-form button {
+    border-radius: 6px;
+    background-color: #8b5e3c;
+    border-color: #8b5e3c;
+    color: #fff;
+}
+
+.add-form button:hover {
+    background-color: #a87c52;
+    border-color: #a87c52;
+}
+
+/* =======================
+   Modales
+======================= */
+.modal-content {
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #fdf7ed;
+    font-family: 'Merriweather', serif;
+}
+
+.modal-header {
+    background-color: #a87c52;
+    color: #fff;
+    font-weight: 600;
+}
+
+.modal-footer button {
+    border-radius: 6px;
+}
+
+.modal-body input,
+.modal-body select {
+    border-radius: 6px;
+    margin-bottom: 0.8rem;
+    border: 1px solid #c7b198;
+    background-color: #fffaf0;
+}
+
+/* =======================
+   Botones
+======================= */
+.btn-primary {
+    background-color: #8b5e3c;
+    border-color: #8b5e3c;
+}
+
+.btn-primary:hover {
+    background-color: #a87c52;
+    border-color: #a87c52;
+}
+
+.btn-warning {
+    background-color: #d4a373;
+    border-color: #d4a373;
+    color: #fff;
+}
+
+.btn-warning:hover {
+    background-color: #e0b182;
+    border-color: #e0b182;
+}
+
+.btn-danger {
+    background-color: #c94c4c;
+    border-color: #c94c4c;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #d66565;
+    border-color: #d66565;
+}
+
+.btn-secondary {
+    background-color: #b8a17a;
+    border-color: #b8a17a;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background-color: #d4b996;
+    border-color: #d4b996;
+}
+
+.hidden {
+    display: none;
+}
