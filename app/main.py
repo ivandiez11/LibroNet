@@ -14,6 +14,10 @@ from app.database import (
 )
 
 # =========================
+# FastAPI app initialization
+app = FastAPI(title="LibroNet")
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+templates = Jinja2Templates(directory="app/templates")
 # MODELOS
 # =========================
 
