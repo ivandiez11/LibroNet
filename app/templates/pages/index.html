@@ -294,7 +294,7 @@ td .badge {
 
 <h2 class="mt-4">Agregar Nuevo Libro</h2>
 
-<form class="add-form" method="post" action="/libros/crear">
+<form class="add-form" id="formAgregar">
     <div class="row g-2">
         <div class="col-md-3"><input type="text" name="titulo" class="form-control" placeholder="Título" required></div>
         <div class="col-md-3"><input type="text" name="autor" class="form-control" placeholder="Autor" required></div>
@@ -378,6 +378,25 @@ let libroIdEliminar = null;
 const modalEliminar = new bootstrap.Modal(document.getElementById('modalEliminar'));
 const modalEditar = new bootstrap.Modal(document.getElementById('modalEditar'));
 
+// CREAR via API
+document.getElementById('formAgregar').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const data = Object.fromEntries(new FormData(form).entries());
+    data.ejemplares = parseInt(data.ejemplares) || 1;
+    data.disponible = parseInt(data.disponible) || 0;
+    data.anio_publicacion = data.anio_publicacion ? parseInt(data.anio_publicacion) : null;
+
+    const response = await fetch('/api/libros', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+
+    if (response.ok) { form.reset(); location.reload(); }
+    else { const err = await response.json().catch(()=>({})); alert('Error al crear libro: ' + (err.detail || response.status)); }
+});
+
 // ELIMINAR
 document.addEventListener('click', e => {
     const btn = e.target.closest('.btn-eliminar');
@@ -388,7 +407,7 @@ document.addEventListener('click', e => {
 
 document.getElementById('btnConfirmarEliminar').addEventListener('click', async () => {
     if (!libroIdEliminar) return;
-    const response = await fetch(`/libros/${libroIdEliminar}`, { method: 'DELETE' });
+    const response = await fetch(`/api/libros/${libroIdEliminar}`, { method: 'DELETE' });
     if (response.ok) { location.reload(); } 
     else { alert('Error al eliminar el libro'); }
 });
@@ -416,20 +435,31 @@ document.addEventListener('click', e => {
 // GUARDAR CAMBIOS
 document.getElementById('btnGuardarEditar').addEventListener('click', async () => {
     const form = document.getElementById('formEditar');
-    const data = new FormData(form);
-    const id = data.get('id_libro');
-    const payload = new URLSearchParams(data);
+    const data = Object.fromEntries(new FormData(form).entries());
+    const id = data.id_libro;
+    const payload = {
+        titulo: data.titulo,
+        autor: data.autor,
+        editorial: data.editorial || null,
+        isbn: data.isbn || null,
+        anio_publicacion: data.anio_publicacion ? parseInt(data.anio_publicacion) : null,
+        categoria: data.categoria || null,
+        ejemplares: parseInt(data.ejemplares) || 1,
+        disponible: parseInt(data.disponible) || 0
+    };
 
-    const response = await fetch(`/libros/editar/${id}`, {
-        method: 'POST',
-        body: payload
+    const response = await fetch(`/api/libros/${id}`, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
     });
 
-    if (response.ok || response.status === 303) {
+    if (response.ok) {
         modalEditar.hide();
         location.reload();
     } else {
-        alert('Error al actualizar el libro');
+        const err = await response.json().catch(()=>({}));
+        alert('Error al actualizar el libro: ' + (err.detail || response.status));
     }
 });
 </script>
