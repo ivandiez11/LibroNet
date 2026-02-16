@@ -1,0 +1,100 @@
+.libros-container h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-dark);
+}
+
+.libros-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.libro-card {
+  background-color: var(--bg-white);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.libro-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.libro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.libro-header h3 {
+  font-size: 1.25rem;
+  color: var(--text-dark);
+  line-height: 1.4;
+  flex: 1;
+  margin: 0;
+}
+
+.libro-badge {
+  background-color: var(--success-color);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.libro-body {
+  flex: 1;
+  margin-bottom: 1rem;
+}
+
+.libro-body p {
+  margin: 0.5rem 0;
+  color: var(--text-light);
+  font-size: 0.875rem;
+}
+
+.libro-body p strong {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.libro-categoria {
+  margin-top: 0.75rem !important;
+}
+
+.categoria-tag {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.libro-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.libro-actions .btn {
+  flex: 1;
+  justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .libros-grid {
+    grid-template-columns: 1fr;
+  }
+}

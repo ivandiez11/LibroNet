@@ -109,31 +109,21 @@ def update_libro(id_libro: int, data: dict) -> bool:
     try:
         conn = get_connection()
         cur = conn.cursor()
-        cur.execute(
-            """
-            UPDATE libros SET
-                titulo=%s,
-                autor=%s,
-                editorial=%s,
-                isbn=%s,
-                anio_publicacion=%s,
-                categoria=%s,
-                ejemplares=%s,
-                disponible=%s
-            WHERE id_libro=%s
-            """,
-            (
-                data["titulo"],
-                data["autor"],
-                data.get("editorial"),
-                data.get("isbn"),
-                data.get("anio_publicacion"),
-                data.get("categoria"),
-                data["ejemplares"],
-                data["disponible"],
-                id_libro
-            )
-        )
+        
+        # Construir la consulta dinámicamente solo con los campos presentes
+        fields = []
+        values = []
+        for key, value in data.items():
+            fields.append(f"{key}=%s")
+            values.append(value)
+        
+        if not fields:
+            return False
+        
+        values.append(id_libro)
+        query = f"UPDATE libros SET {', '.join(fields)} WHERE id_libro=%s"
+        
+        cur.execute(query, tuple(values))
         conn.commit()
         return cur.rowcount > 0
     finally:
