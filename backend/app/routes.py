@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
-from app.models import LibroNet, LibroCreate, LibroUpdate
-from app.database import (
+from .models import LibroNet, LibroCreate, LibroUpdate
+from .database import (
     fetch_all_libros,
     fetch_libro_by_id,
     create_libro,

@@ -5,8 +5,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from typing import Optional, List
+from pathlib import Path
 
-from app.database import (
+from .database import (
     fetch_all_libros,
     fetch_libro_by_id,
     create_libro,
@@ -14,11 +15,13 @@ from app.database import (
     delete_libro
 )
 
+BASE_DIR = Path(__file__).resolve().parent
+
 # =========================
 # FastAPI app initialization
 app = FastAPI(title="LibroNet")
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
-templates = Jinja2Templates(directory="app/templates")
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 # Habilitar CORS para permitir uso de la API desde clientes externos (ajusta orígenes en producción)
 app.add_middleware(
@@ -32,15 +35,15 @@ app.add_middleware(
 # =========================
 
 class LibroNet(BaseModel):
-    id_libro: Optional[int]
+    id_libro: Optional[int] = None
     titulo: str
     autor: str
-    editorial: Optional[str]
-    isbn: Optional[str]
-    anio_publicacion: Optional[int]
-    categoria: Optional[str]
-    ejemplares: int
-    disponible: int
+    editorial: Optional[str] = None
+    isbn: Optional[str] = None
+    anio_publicacion: Optional[int] = None
+    categoria: Optional[str] = None
+    ejemplares: int = 1
+    disponible: int = 1
 
 # =========================
 # UTILIDADES
